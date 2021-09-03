@@ -5,6 +5,27 @@ import java.text.NumberFormat
 import java.util.Locale
 import kotlin.math.floor
 
+fun amountFor(performance: Performance, play: Play): Int {
+    var thisAmount = 0
+    when (play.type) {
+        PlayType.TRAGEDY -> {
+            thisAmount = 40000;
+            if (performance.audience > 30) {
+                thisAmount += 1000 * (performance.audience - 30)
+            }
+        }
+        PlayType.COMEDY -> {
+            thisAmount = 30000;
+            if (performance.audience > 20) {
+                thisAmount += 10000 + 500 * (performance.audience - 20)
+            }
+            thisAmount += 300 * performance.audience
+        }
+        else -> throw Error("알 수 없는 장르: ${play.type}")
+    }
+    return thisAmount
+}
+
 fun statement(invoices: Invoice, plays: Map<String, Play>): String {
     var totalAmount = 0
     var volumeCredits = 0
@@ -13,24 +34,8 @@ fun statement(invoices: Invoice, plays: Map<String, Play>): String {
 
     for (performance in invoices.performances) {
         val play = plays[performance.playId] ?: throw ClassNotFoundException("should be exist")
-        var thisAmount = 0
 
-        when (play.type) {
-            PlayType.TRAGEDY -> {
-                thisAmount = 40000;
-                if (performance.audience > 30) {
-                    thisAmount += 1000 * (performance.audience - 30)
-                }
-            }
-            PlayType.COMEDY -> {
-                thisAmount = 30000;
-                if (performance.audience > 20) {
-                    thisAmount += 10000 + 500 * (performance.audience - 20)
-                }
-                thisAmount += 300 * performance.audience
-            }
-            else -> throw Error("알 수 없는 장르: ${play.type}")
-        }
+        val thisAmount = amountFor(performance, play)
 
         // 포인트를 적립한다.
         volumeCredits += (performance.audience - 30).coerceAtLeast(0)
