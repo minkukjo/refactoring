@@ -37,16 +37,14 @@ fun statement(invoices: Invoice, plays: Map<String, Play>): String {
     val format = NumberFormat.getCurrencyInstance(Locale.US)
 
     for (performance in invoices.performances) {
-        val thisAmount = amountFor(performance)
-
         // 포인트를 적립한다.
         volumeCredits += (performance.audience - 30).coerceAtLeast(0)
         // 희극 관객 5명마다 추가 포인트를 제공한다.
         if (PlayType.COMEDY == playFor(performance).type) volumeCredits += floor((performance.audience / 5).toDouble()).toInt()
 
         // 청구 내역을 출력한다.
-        result += "${playFor(performance).name}: ${format.format(thisAmount / 100)} ${performance.audience}석\n"
-        totalAmount += thisAmount
+        result += "${playFor(performance).name}: ${format.format(amountFor(performance) / 100)} ${performance.audience}석\n"
+        totalAmount += amountFor(performance)
     }
     result += "총액: ${format.format(totalAmount / 100)}\n"
     result += "적립 포인트: ${volumeCredits}점"
