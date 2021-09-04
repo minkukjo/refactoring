@@ -1,3 +1,5 @@
+import application.htmlStatement
+import application.statement
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
@@ -6,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class MainKtTest {
 
     @Test
-    @DisplayName("statement 실행 결과 테스트")
+    @DisplayName("application.statement 실행 결과 테스트")
     fun testStatement() {
         // given
         val json = Json {
@@ -31,7 +33,7 @@ internal class MainKtTest {
     }
 
     @Test
-    @DisplayName("htmlStatement 실행 결과 테스트")
+    @DisplayName("application.htmlStatement 실행 결과 테스트")
     fun testHtmlStatement() {
         // given
         val json = Json {

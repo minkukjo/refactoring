@@ -1,3 +1,5 @@
+package domain
+
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializer
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -8,7 +10,7 @@ import kotlinx.serialization.encoding.Encoder
 
 @Serializer(forClass = PlayType::class)
 object PlayTypeSerializer : KSerializer<PlayType> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("PlayType", PrimitiveKind.STRING)
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("domain.PlayType", PrimitiveKind.STRING)
 
     override fun serialize(encoder: Encoder, value: PlayType) {
         encoder.encodeString(value.key)

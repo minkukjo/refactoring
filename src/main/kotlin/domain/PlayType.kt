@@ -1,3 +1,5 @@
+package domain
+
 import kotlinx.serialization.Serializable
 
 @Serializable(with = PlayTypeSerializer::class)
