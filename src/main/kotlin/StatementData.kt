@@ -1,0 +1,1 @@
+class StatementData(val customer: String, val performances: List<Performance>)

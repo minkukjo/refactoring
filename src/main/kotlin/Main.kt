@@ -5,11 +5,12 @@ import java.text.NumberFormat
 import java.util.Locale
 import kotlin.math.floor
 
-fun statement(invoices: Invoice, plays: Map<String, Play>): String {
-    return renderPlainText(invoices, plays)
+fun statement(invoice: Invoice, plays: Map<String, Play>): String {
+    val statementData = StatementData(invoice.customer, invoice.performances)
+    return renderPlainText(statementData, plays)
 }
 
-fun renderPlainText(invoices: Invoice, plays: Map<String, Play>): String {
+fun renderPlainText(data: StatementData, plays: Map<String, Play>): String {
 
     fun playFor(performance: Performance): Play {
         return plays[performance.playId] ?: throw ClassNotFoundException("should be exist")
@@ -49,7 +50,7 @@ fun renderPlainText(invoices: Invoice, plays: Map<String, Play>): String {
 
     fun totalVolumeCredits(): Int {
         var result = 0
-        for (performance in invoices.performances) {
+        for (performance in data.performances) {
             result += volumeCreditsFor(performance)
         }
         return result
@@ -57,15 +58,15 @@ fun renderPlainText(invoices: Invoice, plays: Map<String, Play>): String {
 
     fun totalAmount(): Int {
         var result = 0
-        for (performance in invoices.performances) {
+        for (performance in data.performances) {
             result += amountFor(performance)
         }
         return result
     }
 
-    var result = "청구 내역 (고객명: ${invoices.customer}\n"
+    var result = "청구 내역 (고객명: ${data.customer}\n"
 
-    for (performance in invoices.performances) {
+    for (performance in data.performances) {
         // 청구 내역을 출력한다.
         result += "${playFor(performance).name}: ${usd(amountFor(performance))} ${performance.audience}석\n"
     }
