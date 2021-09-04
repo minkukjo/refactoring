@@ -2,32 +2,32 @@ package application
 
 import domain.Invoice
 import domain.Performance
-import domain.PerformanceCalculator
 import domain.Play
 import domain.PlayType
 import domain.StatementData
-import kotlin.math.floor
+import domain.calculator.ComedyCalculator
+import domain.calculator.PerformanceCalculator
+import domain.calculator.TragedyCalculator
+
+fun createPerformanceCalculator(performance: Performance, play: Play): PerformanceCalculator {
+    return when (play.type) {
+        PlayType.TRAGEDY -> TragedyCalculator(performance)
+        PlayType.COMEDY -> ComedyCalculator(performance)
+    }
+}
 
 fun createStatementData(invoice: Invoice, plays: Map<String, Play>): StatementData {
-    
+
     fun playFor(performance: Performance): Play {
         return plays[performance.playId] ?: throw ClassNotFoundException("should be exist")
     }
 
-    fun volumeCreditsFor(performance: Performance): Int {
-        var result = 0
-        result += (performance.audience - 30).coerceAtLeast(0)
-        if (PlayType.COMEDY == performance.play?.type)
-            result += floor((performance.audience / 5).toDouble()).toInt()
-        return result
-    }
-
     fun enrichPerformance(performance: Performance): Performance {
         val result = Performance(performance.playId, performance.audience)
-        val calculator = PerformanceCalculator(performance, playFor(result))
-        result.amount = calculator.amount(result)
-        result.play = calculator.play
-        result.volumeCredits = volumeCreditsFor(result)
+        val calculator = createPerformanceCalculator(result, playFor(result))
+        result.amount = calculator.amount()
+        result.play = playFor(result)
+        result.volumeCredits = calculator.volumeCredits()
         return result
     }
 
