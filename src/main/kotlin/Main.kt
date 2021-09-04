@@ -5,8 +5,7 @@ import java.text.NumberFormat
 import java.util.Locale
 import kotlin.math.floor
 
-fun statement(invoice: Invoice, plays: Map<String, Play>): String {
-
+fun createStatementData(invoice: Invoice, plays: Map<String, Play>): StatementData {
     fun amountFor(performance: Performance): Int {
         var result = 0
         when (performance.play?.type) {
@@ -59,15 +58,17 @@ fun statement(invoice: Invoice, plays: Map<String, Play>): String {
         }
     }
 
-    val statementData = StatementData(invoice.customer, invoice.performances.map { enrichPerformance(it) }).apply {
+    return StatementData(invoice.customer, invoice.performances.map { enrichPerformance(it) }).apply {
         this.totalVolumeCredits = totalVolumeCredits(this)
         this.totalAmount = totalAmount(this)
     }
-    return renderPlainText(statementData, plays)
 }
 
-fun renderPlainText(data: StatementData, plays: Map<String, Play>): String {
+fun statement(invoice: Invoice, plays: Map<String, Play>): String {
+    return renderPlainText(createStatementData(invoice, plays))
+}
 
+fun renderPlainText(data: StatementData): String {
     fun usd(number: Int): String {
         return NumberFormat.getCurrencyInstance(Locale.US).format(number / 100)
     }
