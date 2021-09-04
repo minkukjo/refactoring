@@ -48,19 +48,15 @@ fun statement(invoice: Invoice, plays: Map<String, Play>): String {
     }
 
     fun totalVolumeCredits(data: StatementData): Int {
-        var result = 0
-        for (performance in data.performances) {
-            result += performance.volumeCredits
+        return data.performances.fold(0) { total, performance ->
+            total + performance.volumeCredits
         }
-        return result
     }
 
     fun totalAmount(data: StatementData): Int {
-        var result = 0
-        for (performance in data.performances) {
-            result += performance.amount
+        return data.performances.fold(0) { total, performance ->
+            total + performance.amount
         }
-        return result
     }
 
     val statementData = StatementData(invoice.customer, invoice.performances.map { enrichPerformance(it) }).apply {
