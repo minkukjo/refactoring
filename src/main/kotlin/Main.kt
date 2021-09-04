@@ -6,25 +6,26 @@ import java.util.Locale
 import kotlin.math.floor
 
 fun amountFor(performance: Performance, play: Play): Int {
-    var thisAmount = 0
+    var result = 0
     when (play.type) {
         PlayType.TRAGEDY -> {
-            thisAmount = 40000;
+            result = 40000;
             if (performance.audience > 30) {
-                thisAmount += 1000 * (performance.audience - 30)
+                result += 1000 * (performance.audience - 30)
             }
         }
         PlayType.COMEDY -> {
-            thisAmount = 30000;
+            result = 30000;
             if (performance.audience > 20) {
-                thisAmount += 10000 + 500 * (performance.audience - 20)
+                result += 10000 + 500 * (performance.audience - 20)
             }
-            thisAmount += 300 * performance.audience
+            result += 300 * performance.audience
         }
         else -> throw Error("알 수 없는 장르: ${play.type}")
     }
-    return thisAmount
+    return result
 }
+
 
 fun statement(invoices: Invoice, plays: Map<String, Play>): String {
     var totalAmount = 0
@@ -32,8 +33,12 @@ fun statement(invoices: Invoice, plays: Map<String, Play>): String {
     var result = "청구 내역 (고객명: ${invoices.customer}\n"
     val format = NumberFormat.getCurrencyInstance(Locale.US)
 
+    fun playFor(performance: Performance): Play {
+        return plays[performance.playId] ?: throw ClassNotFoundException("should be exist")
+    }
+
     for (performance in invoices.performances) {
-        val play = plays[performance.playId] ?: throw ClassNotFoundException("should be exist")
+        val play = playFor(performance)
 
         val thisAmount = amountFor(performance, play)
 
@@ -47,7 +52,7 @@ fun statement(invoices: Invoice, plays: Map<String, Play>): String {
         totalAmount += thisAmount
     }
     result += "총액: ${format.format(totalAmount / 100)}\n"
-    result += "적립 포인트: ${volumeCredits}점\n"
+    result += "적립 포인트: ${volumeCredits}점"
     return result
 }
 
