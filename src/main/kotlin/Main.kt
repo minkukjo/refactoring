@@ -6,6 +6,10 @@ import java.util.Locale
 import kotlin.math.floor
 
 fun statement(invoices: Invoice, plays: Map<String, Play>): String {
+    return renderPlainText(invoices, plays)
+}
+
+fun renderPlainText(invoices: Invoice, plays: Map<String, Play>): String {
 
     fun playFor(performance: Performance): Play {
         return plays[performance.playId] ?: throw ClassNotFoundException("should be exist")
