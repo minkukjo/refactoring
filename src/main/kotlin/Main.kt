@@ -6,19 +6,10 @@ import java.util.Locale
 import kotlin.math.floor
 
 fun statement(invoice: Invoice, plays: Map<String, Play>): String {
-    val statementData = StatementData(invoice.customer, invoice.performances)
-    return renderPlainText(statementData, plays)
-}
-
-fun renderPlainText(data: StatementData, plays: Map<String, Play>): String {
-
-    fun playFor(performance: Performance): Play {
-        return plays[performance.playId] ?: throw ClassNotFoundException("should be exist")
-    }
 
     fun amountFor(performance: Performance): Int {
         var result = 0
-        when (playFor(performance).type) {
+        when (performance.play?.type) {
             PlayType.TRAGEDY -> {
                 result = 40000;
                 if (performance.audience > 30) {
@@ -36,58 +27,82 @@ fun renderPlainText(data: StatementData, plays: Map<String, Play>): String {
         return result
     }
 
+    fun playFor(performance: Performance): Play {
+        return plays[performance.playId] ?: throw ClassNotFoundException("should be exist")
+    }
+
     fun volumeCreditsFor(performance: Performance): Int {
         var result = 0
         result += (performance.audience - 30).coerceAtLeast(0)
-        if (PlayType.COMEDY == playFor(performance).type)
+        if (PlayType.COMEDY == performance.play?.type)
             result += floor((performance.audience / 5).toDouble()).toInt()
         return result
     }
 
+    fun enrichPerformance(performance: Performance): Performance {
+        val result = Performance(performance.playId, performance.audience)
+        result.play = playFor(result)
+        result.amount = amountFor(result)
+        result.volumeCredits = volumeCreditsFor(result)
+        return result
+    }
+
+    fun totalVolumeCredits(data: StatementData): Int {
+        var result = 0
+        for (performance in data.performances) {
+            result += performance.volumeCredits
+        }
+        return result
+    }
+
+    fun totalAmount(data: StatementData): Int {
+        var result = 0
+        for (performance in data.performances) {
+            result += performance.amount
+        }
+        return result
+    }
+
+    val statementData = StatementData(invoice.customer, invoice.performances.map { enrichPerformance(it) }).apply {
+        this.totalVolumeCredits = totalVolumeCredits(this)
+        this.totalAmount = totalAmount(this)
+    }
+    return renderPlainText(statementData, plays)
+}
+
+fun renderPlainText(data: StatementData, plays: Map<String, Play>): String {
+
     fun usd(number: Int): String {
         return NumberFormat.getCurrencyInstance(Locale.US).format(number / 100)
-    }
-
-    fun totalVolumeCredits(): Int {
-        var result = 0
-        for (performance in data.performances) {
-            result += volumeCreditsFor(performance)
-        }
-        return result
-    }
-
-    fun totalAmount(): Int {
-        var result = 0
-        for (performance in data.performances) {
-            result += amountFor(performance)
-        }
-        return result
     }
 
     var result = "청구 내역 (고객명: ${data.customer}\n"
 
     for (performance in data.performances) {
         // 청구 내역을 출력한다.
-        result += "${playFor(performance).name}: ${usd(amountFor(performance))} ${performance.audience}석\n"
+        result += "${performance.play?.name}: ${usd(performance.amount)} ${performance.audience}석\n"
     }
-    result += "총액: ${usd(totalAmount())}\n"
-    result += "적립 포인트: ${totalVolumeCredits()}점"
+    result += "총액: ${usd(data.totalAmount)}\n"
+    result += "적립 포인트: ${data.totalVolumeCredits}점"
     return result
 }
 
-fun getPlays(): Map<String, Play> {
+fun getPlays(json: Json): Map<String, Play> {
     val playsJson = File("./src/main/resources/plays.json").readText(Charsets.UTF_8)
-    return Json.decodeFromString(playsJson)
+    return json.decodeFromString(playsJson)
 }
 
-fun getInvoices(): List<Invoice> {
+fun getInvoices(json: Json): List<Invoice> {
     val invoicesJson = File("./src/main/resources/invoices.json").readText(Charsets.UTF_8)
-    return Json.decodeFromString(invoicesJson)
+    return json.decodeFromString(invoicesJson)
 }
 
 
 fun main() {
-    val plays = getPlays()
-    val invoices = getInvoices()
+    val json = Json {
+        ignoreUnknownKeys = true
+    }
+    val plays = getPlays(json)
+    val invoices = getInvoices(json)
     println(statement(invoices[0], plays))
 }

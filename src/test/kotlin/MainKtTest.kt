@@ -1,3 +1,4 @@
+import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -8,8 +9,11 @@ internal class MainKtTest {
     @DisplayName("statement 실행 결과 테스트")
     fun testStatement() {
         // given
-        val plays = getPlays()
-        val invoices = getInvoices()
+        val json = Json {
+            ignoreUnknownKeys = true
+        }
+        val plays = getPlays(json)
+        val invoices = getInvoices(json)
 
         // when
         val result = statement(invoices[0], plays)
