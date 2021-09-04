@@ -32,30 +32,41 @@ fun statement(invoices: Invoice, plays: Map<String, Play>): String {
     }
 
     fun volumeCreditsFor(performance: Performance): Int {
-        var volumeCredits = 0
-        volumeCredits += (performance.audience - 30).coerceAtLeast(0)
+        var result = 0
+        result += (performance.audience - 30).coerceAtLeast(0)
         if (PlayType.COMEDY == playFor(performance).type)
-            volumeCredits += floor((performance.audience / 5).toDouble()).toInt()
-        return volumeCredits
+            result += floor((performance.audience / 5).toDouble()).toInt()
+        return result
     }
 
-    fun format(number: Int): String {
-        return NumberFormat.getCurrencyInstance(Locale.US).format(number)
+    fun usd(number: Int): String {
+        return NumberFormat.getCurrencyInstance(Locale.US).format(number / 100)
     }
 
-    var totalAmount = 0
-    var volumeCredits = 0
+    fun totalVolumeCredits(): Int {
+        var result = 0
+        for (performance in invoices.performances) {
+            result += volumeCreditsFor(performance)
+        }
+        return result
+    }
+
+    fun totalAmount(): Int {
+        var result = 0
+        for (performance in invoices.performances) {
+            result += amountFor(performance)
+        }
+        return result
+    }
+
     var result = "청구 내역 (고객명: ${invoices.customer}\n"
 
     for (performance in invoices.performances) {
-        volumeCredits += volumeCreditsFor(performance)
-
         // 청구 내역을 출력한다.
-        result += "${playFor(performance).name}: ${format(amountFor(performance) / 100)} ${performance.audience}석\n"
-        totalAmount += amountFor(performance)
+        result += "${playFor(performance).name}: ${usd(amountFor(performance))} ${performance.audience}석\n"
     }
-    result += "총액: ${format(totalAmount / 100)}\n"
-    result += "적립 포인트: ${volumeCredits}점"
+    result += "총액: ${usd(totalAmount())}\n"
+    result += "적립 포인트: ${totalVolumeCredits()}점"
     return result
 }
 
