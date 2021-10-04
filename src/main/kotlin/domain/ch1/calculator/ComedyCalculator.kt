@@ -1,7 +1,7 @@
-package domain.calculator
+package domain.ch1.calculator
 
-import domain.Performance
-import domain.PlayType
+import domain.ch1.Performance
+import domain.ch1.PlayType
 import kotlin.math.floor
 
 class ComedyCalculator(private val performance: Performance) : PerformanceCalculator {

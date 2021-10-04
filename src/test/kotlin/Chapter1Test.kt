@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-internal class MainKtTest {
-
+class Chapter1Test {
     @Test
     @DisplayName("application.statement 실행 결과 테스트")
     fun testStatement() {

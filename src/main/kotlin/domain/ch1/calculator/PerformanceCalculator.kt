@@ -1,4 +1,4 @@
-package domain.calculator
+package domain.ch1.calculator
 
 interface PerformanceCalculator {
     fun amount(): Int

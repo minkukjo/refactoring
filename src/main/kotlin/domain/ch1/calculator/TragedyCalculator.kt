@@ -1,6 +1,6 @@
-package domain.calculator
+package domain.ch1.calculator
 
-import domain.Performance
+import domain.ch1.Performance
 
 class TragedyCalculator(private val performance: Performance) : PerformanceCalculator {
     override fun amount(): Int {

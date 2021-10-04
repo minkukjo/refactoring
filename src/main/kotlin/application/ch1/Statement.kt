@@ -1,8 +1,8 @@
 package application
 
-import domain.Invoice
-import domain.Play
-import domain.StatementData
+import domain.ch1.Invoice
+import domain.ch1.Play
+import domain.ch1.StatementData
 import java.text.NumberFormat
 import java.util.Locale
 

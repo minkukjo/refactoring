@@ -1,4 +1,4 @@
-package domain
+package domain.ch1
 
 import kotlinx.serialization.Serializable
 

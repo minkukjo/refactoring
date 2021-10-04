@@ -1,13 +1,13 @@
 package application
 
-import domain.Invoice
-import domain.Performance
-import domain.Play
-import domain.PlayType
-import domain.StatementData
-import domain.calculator.ComedyCalculator
-import domain.calculator.PerformanceCalculator
-import domain.calculator.TragedyCalculator
+import domain.ch1.Invoice
+import domain.ch1.Performance
+import domain.ch1.Play
+import domain.ch1.PlayType
+import domain.ch1.StatementData
+import domain.ch1.calculator.ComedyCalculator
+import domain.ch1.calculator.PerformanceCalculator
+import domain.ch1.calculator.TragedyCalculator
 
 fun createPerformanceCalculator(performance: Performance, play: Play): PerformanceCalculator {
     return when (play.type) {
