@@ -11,18 +11,25 @@ import java.time.LocalDateTime
 // 가급적 한 줄로 줄여도 좋다.
 fun printOwing(invoice: Invoice) {
     var outstanding: Int = 0
+    fun printBanner() {
+        println("*************")
+        println("**** 고객 채무 ****")
+        println("*************")
+    }
 
-    println("*************")
-    println("**** 고객 채무 ****")
-    println("*************")
+    fun printDetails() {
+        println("고객명 : ${invoice.customer}")
+        println("채무액 : $outstanding")
+        println("마감일 : ${invoice.dueDate}")
+    }
+
+    printBanner()
 
     outstanding += invoice.orders.sumOf { order -> order.amount }
     val today = LocalDateTime.now()
     invoice.dueDate = LocalDate.of(today.year, today.month, today.dayOfMonth).plusDays(30)
 
-    println("고객명 : ${invoice.customer}")
-    println("채무액 : ${outstanding}")
-    println("마감일 : ${invoice.dueDate}")
+    printDetails()
 }
 
 fun main() {
