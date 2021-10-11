@@ -40,6 +40,6 @@ fun printDetails(invoice: Invoice, outstanding: Int) {
 }
 
 fun main() {
-    val invoice = Invoice(orders = listOf(Order(30), Order(50)), customer = "Harry")
+    val invoice = Invoice(orders = listOf(Order(30, 10, 10), Order(50, 10, 10)), customer = "Harry")
     printOwing(invoice)
 }
