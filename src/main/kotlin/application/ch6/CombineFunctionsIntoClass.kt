@@ -1,9 +1,12 @@
 package application.ch6
 
 import domain.ch6.Reading
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import java.io.File
 
-fun acquiredReading(): Reading {
-    return Reading(customer = "harry", quantity = 10, month = 5, year = 2017)
+fun acquiredReading(): String {
+    return File("./src/main/resources/reading.json").readText(Charsets.UTF_8)
 }
 
 // 코드엔 없는 함수라서 임의로 만들었다.
@@ -17,21 +20,21 @@ fun taxThreshold(year: Int): Int {
 }
 
 fun client1() {
-    val aReading = acquiredReading()
-    val baseCharge = baseRate(aReading.month, aReading.year) * aReading.quantity
+    val rawReading = acquiredReading()
+    val aReading = Json.decodeFromString<Reading>(rawReading)
+    val baseCharge = aReading.calculateBaseCharge()
 }
 
 fun client2() {
-    val aReading = acquiredReading()
-    val base = baseRate(aReading.month, aReading.year) * aReading.quantity
+    val rawReading = acquiredReading()
+    val aReading = Json.decodeFromString<Reading>(rawReading)
+    val base = aReading.calculateBaseCharge()
     val taxableCharge = 0.coerceAtLeast(base - taxThreshold(aReading.year))
 }
 
 fun client3() {
-    fun calculateBaseCharge(aReading: Reading): Int {
-        return baseRate(aReading.month, aReading.year) * aReading.quantity
-    }
 
-    val aReading = acquiredReading()
-    val baseCharge = calculateBaseCharge(aReading)
+    val rawReading = acquiredReading()
+    val aReading = Json.decodeFromString<Reading>(rawReading)
+    val baseCharge = aReading.calculateBaseCharge()
 }
