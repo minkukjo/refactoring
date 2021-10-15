@@ -7,8 +7,13 @@ import kotlinx.serialization.json.Json
 import java.io.File
 import kotlin.system.exitProcess
 
-fun countOrders(commandLine: CommandLine, args: Array<String>): Int {
-    val input = File(commandLine.fileName).readText(Charsets.UTF_8)
+fun parseCommandLine(args: Array<String>): CommandLine {
+    if (args.isEmpty()) throw RuntimeException("파일명을 입력하세요!")
+    return CommandLine(onlyCountReady = args.any { arg -> "-r" == arg }, filename = args[args.size - 1])
+}
+
+fun countOrders(commandLine: CommandLine): Int {
+    val input = File(commandLine.filename).readText(Charsets.UTF_8)
     val orders = Json.decodeFromString<Array<Order>>(input)
     return if (commandLine.onlyCountReady) {
         orders.count { item -> "ready" == item.status }
@@ -18,9 +23,7 @@ fun countOrders(commandLine: CommandLine, args: Array<String>): Int {
 }
 
 fun run(args: Array<String>): Int {
-    if (args.isEmpty()) throw RuntimeException("파일명을 입력하세요!")
-    val commandLine = CommandLine(onlyCountReady = args.any { arg -> "-r" == arg }, fileName = args[args.size - 1])
-    return countOrders(commandLine, args)
+    return countOrders(parseCommandLine(args))
 }
 
 fun main(args: Array<String>) {
