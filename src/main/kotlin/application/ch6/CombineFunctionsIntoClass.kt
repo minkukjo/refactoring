@@ -27,13 +27,9 @@ fun client1() {
 }
 
 fun client2() {
-    fun taxableChargeFn(aReading: Reading): Int {
-        return 0.coerceAtLeast(aReading.baseCharge() - taxThreshold(aReading.year))
-    }
-
     val rawReading = acquiredReading()
     val aReading = Json.decodeFromString<Reading>(rawReading)
-    val taxableCharge = taxableChargeFn(aReading)
+    val taxableCharge = aReading.taxableCharge()
     println(taxableCharge)
 }
 
