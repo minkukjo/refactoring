@@ -14,9 +14,13 @@ fun applyShipping(priceData: PriceData, shippingMethod: ShippingMethod): Int {
     return priceData.basePrice - priceData.discount + shippingCost;
 }
 
-fun priceOrder(product: Product, quantity: Int, shippingMethod: ShippingMethod): Int {
+fun calculatePricingData(product: Product, quantity: Int): PriceData {
     val basePrice = product.basePrice * quantity
     val discount = (quantity - product.discountThreshold).coerceAtLeast(0)
-    val priceData = PriceData(basePrice, quantity, discount)
+    return PriceData(basePrice, quantity, discount)
+}
+
+fun priceOrder(product: Product, quantity: Int, shippingMethod: ShippingMethod): Int {
+    val priceData = calculatePricingData(product, quantity)
     return applyShipping(priceData, shippingMethod)
 }
