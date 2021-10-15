@@ -1,0 +1,14 @@
+[
+  {
+    "item": "book",
+    "status": "ready"
+  },
+  {
+    "item": "beer",
+    "status": "process"
+  },
+  {
+    "item": "laptop",
+    "status": "ready"
+  }
+]
