@@ -22,19 +22,30 @@ fun taxThreshold(year: Int): Int {
 fun client1() {
     val rawReading = acquiredReading()
     val aReading = Json.decodeFromString<Reading>(rawReading)
-    val baseCharge = aReading.calculateBaseCharge()
+    val baseCharge = aReading.baseCharge()
+    println(baseCharge)
 }
 
 fun client2() {
+    fun taxableChargeFn(aReading: Reading): Int {
+        return 0.coerceAtLeast(aReading.baseCharge() - taxThreshold(aReading.year))
+    }
+
     val rawReading = acquiredReading()
     val aReading = Json.decodeFromString<Reading>(rawReading)
-    val base = aReading.calculateBaseCharge()
-    val taxableCharge = 0.coerceAtLeast(base - taxThreshold(aReading.year))
+    val taxableCharge = taxableChargeFn(aReading)
+    println(taxableCharge)
 }
 
 fun client3() {
-
     val rawReading = acquiredReading()
     val aReading = Json.decodeFromString<Reading>(rawReading)
-    val baseCharge = aReading.calculateBaseCharge()
+    val baseCharge = aReading.baseCharge()
+    println(baseCharge)
+}
+
+fun main() {
+    client1()
+    client2()
+    client3()
 }

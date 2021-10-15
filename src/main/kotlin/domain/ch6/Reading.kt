@@ -10,7 +10,7 @@ class Reading(
         val month: Int,
         val year: Int
 ) {
-    fun calculateBaseCharge(): Int {
+    fun baseCharge(): Int {
         return baseRate(this.month, this.year) * this.quantity
     }
 }
