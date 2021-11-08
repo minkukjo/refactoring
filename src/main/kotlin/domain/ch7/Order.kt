@@ -5,9 +5,16 @@ class Order(
         val item: Item
 ) {
     fun getPrice(): Double {
-        val basePrice = this.item.price * this.quantity
+        return getBasePrice() * getDiscountFactor()
+    }
+
+    fun getBasePrice(): Double {
+        return this.item.price * this.quantity
+    }
+
+    fun getDiscountFactor(): Double {
         var discountFactor = 0.98
-        if (basePrice > 1000) discountFactor -= 0.03
-        return basePrice * discountFactor
+        if (getBasePrice() > 1000) discountFactor -= 0.03
+        return discountFactor
     }
 }
