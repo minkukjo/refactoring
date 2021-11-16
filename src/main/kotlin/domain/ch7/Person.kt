@@ -2,7 +2,21 @@ package domain.ch7
 
 class Person(
         val name: String,
-        val telephoneNumber: String,
-        val officeAreaCode: Int,
-        val officeNumber: Int
-)
+        private val telephoneNumber: TelephoneNumber
+) {
+    fun getOfficeAreaCode(): Int {
+        return telephoneNumber.areaCode
+    }
+
+    fun setOfficeAreaCode(areaCode: Int) {
+        this.telephoneNumber.areaCode = areaCode;
+    }
+
+    fun getOfficeNumber(): Int {
+        return telephoneNumber.number
+    }
+
+    fun setOfficeNumber(number: Int) {
+        this.telephoneNumber.number = number;
+    }
+}
