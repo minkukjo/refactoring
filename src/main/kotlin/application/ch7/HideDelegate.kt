@@ -5,6 +5,6 @@ import domain.ch7.Worker
 
 fun main() {
     val aWorker = Worker("harry", Department("400", "sheldon"))
-    val manager = aWorker.department.manager
-    
+    val manager = aWorker.getManager()
+
 }
