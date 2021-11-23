@@ -49,6 +49,36 @@ fun main() {
 
 /////////////// 다른 예시 /////////////////////////
 
-class Account {
+class Account(
+        val daysOverdrawn: Long,
+        val type: AccountType
+) {
+    fun overdraftCharge(): Double {
+        return type.overdraftCharge(this.daysOverdrawn)
+    }
 
+    fun getBankCharge(): Double {
+        var result = 4.5
+        if (this.daysOverdrawn > 0) {
+            result += this.overdraftCharge()
+        }
+        return result
+    }
+}
+
+class AccountType(
+        val isPremium: Boolean,
+) {
+    fun overdraftCharge(daysOverdrawn: Long): Double {
+        if (this.isPremium) {
+            val baseCharge = 10.0
+            if (daysOverdrawn <= 7) {
+                return baseCharge
+            } else {
+                return baseCharge + (daysOverdrawn - 7) * 0.85
+            }
+        } else {
+            return daysOverdrawn * 1.75
+        }
+    }
 }
