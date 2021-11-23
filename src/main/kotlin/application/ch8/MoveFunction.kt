@@ -53,14 +53,11 @@ class Account(
         val daysOverdrawn: Long,
         val type: AccountType
 ) {
-    fun overdraftCharge(): Double {
-        return type.overdraftCharge(this.daysOverdrawn)
-    }
 
     fun getBankCharge(): Double {
         var result = 4.5
         if (this.daysOverdrawn > 0) {
-            result += this.overdraftCharge()
+            result += this.type.overdraftCharge(this.daysOverdrawn)
         }
         return result
     }
