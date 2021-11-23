@@ -4,7 +4,8 @@ import java.time.LocalDateTime
 
 class Customer(
         val name: String,
-        val contract: CustomerContract = CustomerContract(LocalDateTime.now())
+        private val discountRate: Double,
+        val contract: CustomerContract = CustomerContract(LocalDateTime.now(), discountRate)
 ) {
     fun updateDiscountRate(discountRate: Double) {
         this.contract.discountRate += discountRate
