@@ -5,11 +5,16 @@ package application.ch8
 fun photoDiv(photo: Photo): String {
     return """
         <div>
-            <p>제목 : ${photo.title}</p>
             ${emitPhotoData(photo)}
         </div>
     """.trimIndent()
 }
+
+fun emitPhotoData(photo: Photo) = """
+            <p>제목: ${photo.title}</p>
+            <p>위치: ${photo.location}</p>
+            <p>날짜: ${photo.date}</p>
+            """.trimIndent()
 
 fun renderPerson(person: Person): String {
     return """
@@ -17,13 +22,6 @@ fun renderPerson(person: Person): String {
         ${renderPhoto(person.photo)}
         <p>제목:${person.photo.title}</p>
         ${emitPhotoData(person.photo)}
-    """.trimIndent()
-}
-
-fun emitPhotoData(photo: Photo): String {
-    return """
-        <p>위치: ${photo.location}</p>
-        <p>날짜: ${photo.date}</p>
     """.trimIndent()
 }
 
