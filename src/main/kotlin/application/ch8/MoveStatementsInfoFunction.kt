@@ -1,5 +1,8 @@
 package application.ch8
 
+import domain.ch8.Person
+import domain.ch8.Photo
+
 // 문장을 함수로 옮기기
 
 fun photoDiv(photo: Photo): String {

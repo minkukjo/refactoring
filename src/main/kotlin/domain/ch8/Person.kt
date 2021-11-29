@@ -1,4 +1,4 @@
-package application.ch8
+package domain.ch8
 
 class Person(
         val name: String,
