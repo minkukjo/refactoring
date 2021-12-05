@@ -6,13 +6,15 @@ import domain.ch8.People
 
 fun main() {
     val people = listOf(People(21, 300), People(23, 500), People(20, 100))
-    var youngest = people[0].age
-    var totalSalary = 0
-    for (p in people) {
-        if (p.age < youngest) {
-            youngest = p.age
-        }
-        totalSalary += p.salary
-    }
-    println("최연소 ${youngest}, 총 급여 : ${totalSalary}")
+    val youngest = youngestAge(people)
+    val totalSalary = totalSalary(people)
+    println("최연소 $youngest, 총 급여 : $totalSalary")
+}
+
+private fun totalSalary(people: List<People>): Int {
+    return people.map { p -> p.salary }.reduce { total, p -> total + p }
+}
+
+private fun youngestAge(people: List<People>): Int {
+    return people.minOf { p -> p.age }
 }
