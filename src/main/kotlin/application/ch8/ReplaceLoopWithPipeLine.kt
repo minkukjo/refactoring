@@ -6,20 +6,11 @@ import domain.ch8.Office
 
 fun acquireData(input: String): List<Office> {
     val lines = input.split("\n")
-    var firstLine = true
-    var result = mutableListOf<Office>()
-    for (line in lines) {
-        if (firstLine) {
-            firstLine = false
-            continue
-        }
-        if (line.trim() == "") continue
-        val record = line.split(",")
-        if (record[1].trim() == "India") {
-            result.add(Office(office = record[0].trim(), country = record[1].trim(), telephone = record[2].trim()))
-        }
-    }
-    return result
+    return lines.slice(1 until lines.size)
+            .filter { line -> line.trim() != "" }
+            .map { line -> line.split(",") }
+            .filter { record -> record[1].trim() == "India" }
+            .map { record -> Office(office = record[0].trim(), country = record[1].trim(), telephone = record[2].trim()) }
 }
 
 fun main() {
