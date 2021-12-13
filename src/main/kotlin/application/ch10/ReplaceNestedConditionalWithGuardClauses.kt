@@ -4,15 +4,12 @@ import domain.ch10.Amount
 import domain.ch10.Employee
 
 fun payAmount(employee: Employee): Amount {
-    var result: Amount = if (employee.isSeparated) {
-        Amount(0L, "SEP")
-    } else {
-        if (employee.isRetired) {
-            Amount(0, "RET")
-        } else {
-            // 급여 계산 로직
-            Amount(1000, "")
-        }
+    if (employee.isSeparated) {
+        return Amount(0L, "SEP")
     }
-    return result
+    if (employee.isRetired) {
+        return Amount(0, "RET")
+    }
+    // 급여 계산 로직
+    return Amount(1000, "")
 }
