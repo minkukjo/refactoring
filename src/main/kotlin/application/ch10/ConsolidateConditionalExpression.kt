@@ -6,9 +6,9 @@ package application.ch10
 fun main() {
     val a = 5
     var b = 0
-    if (a < 5) {
-        if (a > 0) {
-            b = 3
-        }
+    b = if (a in 1..4) {
+        3
+    } else {
+        1
     }
 }
