@@ -4,6 +4,8 @@ import domain.ch11.HeatingPlan
 import domain.ch11.Room
 import domain.ch11.TempRange
 
+// 11.4 객체 통째로 넘기기
+
 fun main() {
     val daysTempRange = TempRange(10, 50)
     val aRoom = Room(daysTempRange)
@@ -13,5 +15,4 @@ fun main() {
     if (!aHeatingPlan.withRange(aRoom.daysTempRange)) {
         println("방 온도가 지정 범위를 벗어났습니다")
     }
-
 }
