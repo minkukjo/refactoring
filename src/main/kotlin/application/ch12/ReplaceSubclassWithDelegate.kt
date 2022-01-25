@@ -8,23 +8,45 @@ package application.ch12
 open class Booking(
         val show: String,
         val date: String,
+        val extras: String = "",
 ) {
     private val isPeakDay: Boolean = true
+
+    var premiumBookingDelegate: PremiumBookingDelegate? = null
+
     open fun hasTalkback(): Boolean {
-        return isPeakDay
+        return premiumBookingDelegate?.hasTalkback() ?: this.isPeakDay
+    }
+
+    fun bePremium(extras: String) {
+        this.premiumBookingDelegate = PremiumBookingDelegate(this, extras)
+    }
+
+    fun hasDinner(): Boolean? {
+        return premiumBookingDelegate?.hasTalkback() ?: null
     }
 }
 
-class PremiumBooking(
-        show: String,
-        date: String,
-) : Booking(show, date) {
-    override fun hasTalkback(): Boolean {
+class PremiumBookingDelegate(
+        val host: Booking,
+        val extras: String
+) {
+    fun hasTalkback(): Boolean {
         return true
     }
+}
 
-    private val isPeakDay: Boolean = true
-    fun hasDinner(): Boolean {
-        return isPeakDay
-    }
+fun createBooking(show: String, date: String): Booking {
+    return Booking(show, date)
+}
+
+fun createPremiumBooking(show: String, date: String, extras: String): Booking {
+    val premiumBooking = Booking(show, date, extras)
+    premiumBooking.bePremium(extras)
+    return premiumBooking
+}
+
+fun main() {
+    val aBooking = Booking("123", "2022-01-25")
+    val aPremiumBooking = Booking("12434", "2022-01-25", "vip")
 }
