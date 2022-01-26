@@ -8,6 +8,10 @@ open class CatalogItem(
         val tags: String,
 )
 
-class Scroll(id: Long, title: String, tags: String, val dateLastCleaned: String) : CatalogItem(id, title, tags) {
-
-}
+class Scroll(
+        val id: Long,
+        val title: String,
+        val tags: String,
+        val dateLastCleaned: String,
+        val catalogItem: CatalogItem = CatalogItem(id, title, tags)
+)
